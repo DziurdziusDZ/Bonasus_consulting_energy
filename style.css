@@ -145,12 +145,17 @@ body {
    4. NAWIGACJA
    ========================================================================== */
 .navbar {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 1px solid var(--border-color);
-    padding: 18px 0;
+    border-bottom: 1px solid rgba(27, 67, 50, 0.08);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 
+                0 2px 6px -1px rgba(0, 0, 0, 0.03);
+    padding: 16px 0;
+    transition: all 0.3s ease;
 }
 
 .nav-container {
@@ -194,9 +199,13 @@ body {
    5. HERO
    ========================================================================== */
 .hero {
-    background: linear-gradient(180deg, #ffffff 0%, var(--bg-main) 100%);
-    padding: 100px 0 80px 0;
+    background: 
+        linear-gradient(135deg, rgba(49, 114, 87, 0.92) 0%, rgba(27, 78, 56, 0.95) 100%),
+        url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1600&fit=crop') center/cover no-repeat;
+    color: #ffffff;
+    padding: 120px 0 90px 0;
     text-align: center;
+    box-shadow: 0 15px 35px rgba(13, 34, 25, 0.15);
 }
 
 .hero-content {
@@ -206,14 +215,14 @@ body {
 .hero h1 {
     font-size: 3rem;
     line-height: 1.2;
-    color: var(--primary);
+    color: #ffffff;
     margin-bottom: 20px;
     font-weight: 800;
 }
 
 .hero p {
     font-size: 1.2rem;
-    color: var(--text-muted);
+    color: #d8f3dc;
     margin-bottom: 35px;
 }
 
@@ -223,10 +232,26 @@ body {
     gap: 16px;
 }
 
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
 /* ==========================================================================
    6. O NAS: ZDJĘCIA W OKRĘGACH NAPRZEMIENNIE (LEWO / PRAWO / LEWO)
    ========================================================================== */
-.team-list {
+.team-section {
+    background-color: var(--bg-main); /* #f8faf9 */
+    position: relative;
+    z-index: 1;
+}
+
+   .team-list {
     display: flex;
     flex-direction: column;
     gap: 60px;
@@ -286,6 +311,8 @@ body {
    ========================================================================== */
 .services-section {
     background-color: #ffffff;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .services-grid {
@@ -365,6 +392,10 @@ body {
 /* ==========================================================================
    8. FORMULARZ KONTAKTOWY
    ========================================================================== */
+.contact-section {
+    background-color: var(--bg-main);
+}
+
 .contact-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
