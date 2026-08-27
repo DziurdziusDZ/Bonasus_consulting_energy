@@ -1,0 +1,497 @@
+/* ==========================================================================
+   1. ZMIENNE KOLORYSTYCZNE (PALETA ZIELONA - MOŻESZ JE DOWOLNIE ZMIENIAĆ)
+   ========================================================================== */
+:root {
+    --primary: #1b4332;         /* Głęboka, elegancka zieleń bazowa */
+    --primary-light: #2d6a4f;   /* Jaśniejsza zieleń do nagłówków / hoverów */
+    --accent: #40916c;          /* Akcentowa zieleń (przyciski, ikony) */
+    --accent-glow: #d8f3dc;     /* Bardzo jasna zieleń (tła badge'y, subtelne ramki) */
+    
+    --bg-main: #f8faf9;         /* Bardzo delikatne, czyste tło strony */
+    --bg-card: #ffffff;         /* Białe tło kart */
+    --text-dark: #1f2937;       /* Kolor głównego tekstu */
+    --text-muted: #4b5563;      /* Stonowany kolor opisów */
+    --border-color: #e5e7eb;    /* Kolor obramowań */
+    
+    --font-family: 'Plus Jakarta Sans', sans-serif;
+    --radius: 12px;
+    --shadow: 0 10px 25px -5px rgba(27, 67, 50, 0.06), 0 8px 10px -6px rgba(27, 67, 50, 0.04);
+    --shadow-hover: 0 20px 30px -10px rgba(27, 67, 50, 0.12);
+}
+
+/* ==========================================================================
+   2. RESET I BAZA
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.section {
+    padding: 90px 0;
+}
+
+.section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 60px auto;
+}
+
+.section-subtitle {
+    display: inline-block;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+.section-header h2 {
+    font-size: 2.3rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+}
+
+.section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   3. PRZYCISKI I ELEMENTY INTERFEJSU
+   ========================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(64, 145, 108, 0.3);
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    color: var(--primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-glow);
+    border-color: var(--accent);
+}
+
+.btn-outline {
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    background: transparent;
+}
+
+.btn-outline:hover {
+    background-color: var(--accent);
+    color: #ffffff;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.badge {
+    background-color: var(--accent-glow);
+    color: var(--primary-light);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   4. NAWIGACJA
+   ========================================================================== */
+.navbar {
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+    padding: 18px 0;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo span {
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+/* ==========================================================================
+   5. HERO
+   ========================================================================== */
+.hero {
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg-main) 100%);
+    padding: 100px 0 80px 0;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 35px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* ==========================================================================
+   6. O NAS: ZDJĘCIA W OKRĘGACH NAPRZEMIENNIE (LEWO / PRAWO / LEWO)
+   ========================================================================== */
+.team-list {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.team-card {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    background: var(--bg-card);
+    padding: 40px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+/* Co drugi element odwraca kolejność (zdjęcie po prawej) */
+.team-card:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.team-image-wrapper {
+    flex-shrink: 0;
+}
+
+/* Okrągłe zdjęcie z obramowaniem w kolorze akcentu */
+.team-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--accent-glow);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.team-info h3 {
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.team-role {
+    display: inline-block;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+}
+
+.team-info p {
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+/* ==========================================================================
+   7. USŁUGI (SIATKA KART - W STYLU PAWELGRABOWSKI.PRO/USLUGI)
+   ========================================================================== */
+.services-section {
+    background-color: #ffffff;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+}
+
+.service-card {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--accent);
+}
+
+.service-icon {
+    font-size: 2rem;
+    margin-bottom: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background: var(--accent-glow);
+}
+
+.service-card h3 {
+    font-size: 1.25rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+}
+
+.service-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.service-subitems {
+    list-style: none;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.service-subitems li {
+    font-size: 0.88rem;
+    color: var(--primary-light);
+    font-weight: 500;
+    margin-bottom: 6px;
+    position: relative;
+    padding-left: 16px;
+}
+
+.service-subitems li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.service-card.featured {
+    border-left: 4px solid var(--accent);
+}
+
+/* ==========================================================================
+   8. FORMULARZ KONTAKTOWY
+   ========================================================================== */
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    background: var(--bg-card);
+    padding: 50px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+.contact-details {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detail-item {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.detail-item .icon {
+    font-size: 1.3rem;
+}
+
+.contact-form {
+    background: var(--bg-main);
+    padding: 30px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+.contact-form h3 {
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    background: #ffffff;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.15);
+}
+
+/* ==========================================================================
+   9. STOPKA I RESPONSYWNOŚĆ (MOBILE)
+   ========================================================================== */
+.footer {
+    background: var(--primary);
+    color: #ffffff;
+    padding: 30px 0;
+    font-size: 0.9rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+}
+
+@media (max-width: 900px) {
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.1rem;
+    }
+    
+    .team-card, 
+    .team-card:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+    .nav-links {
+        display: none; /* w prostej wersji ukryte na telefonie */
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
