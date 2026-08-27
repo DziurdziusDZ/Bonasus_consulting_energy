@@ -307,7 +307,7 @@ body {
 }
 
 /* ==========================================================================
-   7. USŁUGI (SIATKA KART - W STYLU PAWELGRABOWSKI.PRO/USLUGI)
+   7. USŁUGI (KARTY ROZSZERZAJĄCE SIĘ W PRAWO)
    ========================================================================== */
 .services-section {
     background-color: #ffffff;
@@ -317,55 +317,89 @@ body {
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    align-items: stretch;
 }
 
 .service-card {
     background: var(--bg-main);
     border: 1px solid var(--border-color);
-    padding: 30px;
+    padding: 28px;
     border-radius: var(--radius);
-    transition: all 0.3s ease;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     display: flex;
     flex-direction: column;
 }
 
 .service-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
     border-color: var(--accent);
+    box-shadow: var(--shadow);
+}
+
+.service-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
 }
 
 .service-icon {
-    font-size: 2rem;
-    margin-bottom: 18px;
+    font-size: 1.8rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 10px;
     background: var(--accent-glow);
 }
 
-.service-card h3 {
-    font-size: 1.25rem;
-    color: var(--primary);
-    margin-bottom: 12px;
+.expand-indicator {
+    font-size: 1.4rem;
+    color: var(--accent);
+    font-weight: 700;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(64, 145, 108, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
-.service-card p {
+.service-card h3 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.service-short-desc {
     color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-bottom: 15px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+/* Treść szczegółowa */
+.service-extra {
+    display: none;
+}
+
+.service-full-desc {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 14px;
 }
 
 .service-subitems {
     list-style: none;
-    margin-top: auto;
-    padding-top: 15px;
-    border-top: 1px dashed var(--border-color);
+    padding: 0;
+    margin: 0;
 }
 
 .service-subitems li {
@@ -385,8 +419,51 @@ body {
     font-weight: bold;
 }
 
-.service-card.featured {
-    border-left: 4px solid var(--accent);
+/* STAN ROZSZERZONY */
+.service-card.expanded {
+    background: #ffffff;
+    border-color: var(--accent);
+    box-shadow: var(--shadow-hover);
+}
+
+.service-card.expanded .expand-indicator {
+    transform: rotate(45deg);
+    background: var(--accent);
+    color: #ffffff;
+}
+
+/* Na ekranach komputerów i tabletów: rozszerzenie na 2 kolumny w prawo */
+@media (min-width: 768px) {
+    .service-card.expanded {
+        grid-column: span 2;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 28px;
+        align-items: start;
+    }
+
+    .service-card.expanded .service-extra {
+        display: block;
+        border-left: 1px dashed var(--border-color);
+        padding-left: 24px;
+        animation: fadeIn 0.3s ease forwards;
+    }
+}
+
+/* Na małych telefonach: rozwijanie w dół bez psucia szerokości */
+@media (max-width: 767px) {
+    .service-card.expanded .service-extra {
+        display: block;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px dashed var(--border-color);
+        animation: fadeIn 0.3s ease forwards;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(8px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 /* ==========================================================================

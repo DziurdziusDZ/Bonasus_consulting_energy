@@ -1,0 +1,98 @@
+{
+  "ogolne": {
+    "hero_badge": "Eksperci rynku energii",
+    "hero_tytul": "Optymalizacja kosztów i bezpieczeństwo energetyczne Twojej firmy",
+    "hero_opis": "Pomagamy przedsiębiorstwom w audytach, pozyskiwaniu rekompensat sektorowych, taryfach i optymalnym doborze źródeł energii.",
+    "kontakt_adres": "ul. Przykładowa 12, 00-001 Warszawa",
+    "kontakt_email": "kontakt@twojadomena.pl",
+    "kontakt_telefon": "+48 123 456 789"
+  },
+  "zespol": [
+    {
+      "imie": "Kuba",
+      "rola": "Ekspert ds. Rynku Energii & Rekompensat",
+      "opis": "Specjalizuje się w doradztwie strategicznym dla odbiorców przemysłowych, analizie taryf oraz procesach pozyskiwania rekompensat sektorowych.",
+      "zdjecie": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face"
+    },
+    {
+      "imie": "Wojtek",
+      "rola": "Audytor & Specjalista ds. Efektywności",
+      "opis": "Odpowiedzialny za audyty energetyczne dużych przedsiębiorstw oraz systemy CISAF. Przeprowadza szczegółowe analizy mocy zamówionej i biernej.",
+      "zdjecie": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face"
+    },
+    {
+      "imie": "Grzegorz",
+      "rola": "Doradca Koncesyjny & Kogeneracja",
+      "opis": "Ekspert w zakresie obowiązków koncesyjnych, dystrybucji oraz obrotu energią elektryczną i ciepłem. Prowadzi projekty kogeneracyjne.",
+      "zdjecie": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
+    }
+  ],
+  "uslugi": [
+    {
+      "ikona": "🏛️",
+      "tytul": "Rekompensaty Sektorowe",
+      "krotki_opis": "Zwrot części kosztów zakupu energii dla firm energochłonnych.",
+      "pelny_opis": "Weryfikacja uprawnień, przygotowanie kompletnych wniosków i reprezentacja przed organami w procesie zwrotu kosztów pośrednich emisji.",
+      "podpunkty": []
+    },
+    {
+      "ikona": "🏭",
+      "tytul": "Odbiorca Przemysłowy",
+      "krotki_opis": "Optymalizacja kosztów energii elektrycznej i gazu.",
+      "pelny_opis": "Uzyskiwanie i utrzymanie statusu odbiorcy przemysłowego, dającego prawo do ulg w opłacie OZE, kogeneracyjnej i akcyzie.",
+      "podpunkty": []
+    },
+    {
+      "ikona": "📈",
+      "tytul": "Wsparcie w Zakupach Energii",
+      "krotki_opis": "Doradztwo strategiczne i przetargi na giełdzie.",
+      "pelny_opis": "Opracowywanie strategii zakupowych na Towarowej Giełdzie Energii, przetargi na zakup energii elektrycznej i gazu.",
+      "podpunkty": []
+    },
+    {
+      "ikona": "📜",
+      "tytul": "Obowiązki Koncesyjne",
+      "krotki_opis": "Kompleksowa obsługa spraw przed URE.",
+      "pelny_opis": "Sprawozdawczość, uzyskiwanie koncesji oraz bieżące doradztwo regulacyjne.",
+      "podpunkty": []
+    },
+    {
+      "ikona": "⚙️",
+      "tytul": "Premia Gwarantowana i Kogeneracyjna",
+      "krotki_opis": "Wsparcie dla instalacji kogeneracyjnych CHP.",
+      "pelny_opis": "Kalkulacje opłacalności, składanie wniosków i bieżące rozliczanie premii.",
+      "podpunkty": []
+    },
+    {
+      "ikona": "🌱",
+      "tytul": "Efektywność Energetyczna",
+      "krotki_opis": "Działania zmierzające do trwałego obniżenia zużycia energii.",
+      "pelny_opis": "Kompleksowy przegląd instalacji oraz identyfikacja strat energetycznych w zakładzie produkcyjnym.",
+      "podpunkty": [
+        "Audyty Energetyczne przedsiębiorstw (ustawowe)",
+        "Wdrożenia i audyty w standardzie CISAF"
+      ]
+    },
+    {
+      "ikona": "🔥",
+      "tytul": "Taryfy dla Energii i Ciepła",
+      "krotki_opis": "Kalkulacja i zatwierdzanie taryf przed URE.",
+      "pelny_opis": "Wsparcie dla operatorów systemów dystrybucyjnych (OSDn) i przedsiębiorstw ciepłowniczych.",
+      "podpunkty": [
+        "Dystrybucja i obrót",
+        "Taryfy ciepłownicze"
+      ]
+    },
+    {
+      "ikona": "📊",
+      "tytul": "Optymalizacja Zakupów i Zużycia",
+      "krotki_opis": "Bieżący monitoring i redukcja opłat dystrybucyjnych.",
+      "pelny_opis": "Weryfikacja parametrów dystrybucyjnych w celu eliminacji kar umownych.",
+      "podpunkty": [
+        "Analiza i audyt umów dystrybucyjnych",
+        "Optymalizacja mocy zamówionej oraz kompensacja mocy biernej",
+        "Audyt i procedura zmiany sprzedawcy"
+      ]
+    }
+  ]
+}
