@@ -5,7 +5,20 @@ header('Content-Type: application/json; charset=utf-8');
 $recipients = "jkoczab@bonasusenergy.pl, wpacholczyk@bonasusenergy.pl";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // 1. Pobranie i oczyszczenie danych z formularza
+    // 1. Sprawdzenie pułapki na boty
+    if (!empty($_POST['company_website_check'])) {
+        // Bot wpadł w pułapkę - udajemy sukces, ale nie wysyłamy maila
+        echo json_encode(['status' => 'success', 'message' => 'Wiadomość została wysłana.']);
+        exit;
+    }
+
+    // 2. Blokada wysyłania zbyt długich wiadomości (ochrona bufora)
+    if (strlen($_POST['message'] ?? '') > 4000 || strlen($_POST['name'] ?? '') > 100) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Przekroczono dopuszczalną długość pól.']);
+        exit;
+    }
+    
     $name    = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $email   = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_FULL_SPECIAL_CHARS);

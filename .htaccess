@@ -1,0 +1,33 @@
+# 1. WYMUSZENIE PROTOKOŁU HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 2. BLOKADA PRZEGLĄDANIA KATALOGÓW PRZEZ PRZEGLĄDARKĘ
+Options -Indexes
+
+# 3. BLOKADA DOSTĘPU DO PLIKÓW UKRYTYCH I KONFIGURACYJNYCH
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "(composer\.json|\.env|\.git|\.md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 4. NAGŁÓWKI BEZPIECZEŃSTWA (SECURITY HEADERS)
+<IfModule mod_headers.c>
+    # Ochrona przed atakami typu Clickjacking (strona nie może być wyświetlana w ramce iframe u kogoś)
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Blokada zgadywania typów MIME (ochrona przed złośliwymi skryptami udającymi obrazy)
+    Header set X-Content-Type-Options "nosniff"
+
+    # Kontrola przekazywania adresu strony odsyłającej
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Blokada nieautoryzowanego użycia kamery, mikrofonu i geolokalizacji
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>

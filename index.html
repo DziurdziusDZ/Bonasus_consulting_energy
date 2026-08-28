@@ -219,6 +219,11 @@
                     <div id="form-feedback" class="form-feedback"></div>
 
                     <button type="submit" id="btn-submit" class="btn btn-primary btn-block">Wyślij wiadomość</button>
+
+                        <!-- Niewidoczne pole-pułapka na boty (Honeypot) -->
+                    <div style="position: absolute; left: -9999px; top: -9999px;" aria-hidden="true">
+                        <input type="text" name="company_website_check" tabindex="-1" autocomplete="off">
+                    </div>
                 </form>
     </section>
 
