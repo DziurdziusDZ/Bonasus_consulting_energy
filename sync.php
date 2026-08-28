@@ -1,27 +1,36 @@
 <?php
-// Adres URL aplikacji Google Apps Script
-$googleApiUrl = "https://script.google.com/macros/s/AKfycbwSrCFjM7Rlan6Mhgk5wkFyrDIRPI9vj5sIvG36mRgFzFjdeBwBO_Na3io5ILyT1ecD/exec";
+// Ustaw własny, trudny do odgadnięcia klucz
+define('SYNC_TOKEN', 'Bonasus_TajnyKlucz_2026!#');
 
-// Pobieramy dane za pomocą cURL z obsługą przekierowań Google
+// Weryfikacja tokenu w adresie URL
+if (!isset($_GET['token']) || $_GET['token'] !== SYNC_TOKEN) {
+    http_response_code(403);
+    die("<h1>403 Forbidden</h1><p>Brak uprawnień do wykonania synchronizacji.</p>");
+}
+
+$googleApiUrl = "https://script.google.com/macros/s/AKfycbwFaCg1DydMeT2nM36YsPve6OVeWemHPFcGsCHQIzTcO-ruypiAenudkQiJ1uu_2pqB/exec";
+
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $googleApiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 if ($httpCode === 200 && !empty($response)) {
-    // Sprawdzamy poprawność formatu JSON
     $jsonTest = json_decode($response);
     if ($jsonTest !== null) {
-        file_put_contents(__DIR__ . '/data.json', $response);
-        echo "<h1>Sukces!</h1><p>Dane z Arkusza Google zostały pomyślnie zsynchronizowane i zapisane w data.json na serwerze.</p>";
+        file_put_contents(__DIR__ . '/data.json', $response, LOCK_EX);
+        echo "<h1>Sukces!</h1><p>Baza zsynchronizowana pomyślnie.</p>";
     } else {
-        echo "<h1>Blad!</h1><p>Otrzymana odpowiedź nie jest poprawnym formatem JSON.</p>";
+        http_response_code(500);
+        echo "<h1>Błąd</h1><p>Niepoprawny format danych JSON z Google.</p>";
     }
 } else {
-    echo "<h1>Blad pobierania!</h1><p>Kod HTTP: " . $httpCode . "</p>";
+    http_response_code(502);
+    echo "<h1>Błąd połączenia</h1><p>Kod HTTP: " . $httpCode . "</p>";
 }
 ?>
