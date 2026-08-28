@@ -100,10 +100,73 @@ async function loadData() {
 }
 
 function toggleServiceCard(clickedCard) {
+    const isAlreadyOpen = clickedCard.classList.contains("expanded");
+
+    // Zamykamy wszystkie inne karty
     document.querySelectorAll(".service-card.expanded").forEach(card => {
-        if (card !== clickedCard) card.classList.remove("expanded");
+        card.classList.remove("expanded");
     });
-    clickedCard.classList.toggle("expanded");
+
+    // Jeśli kliknięta nie była wcześniej otwarta, otwieramy ją i delikatnie centrujemy widok
+    if (!isAlreadyOpen) {
+        clickedCard.classList.add("expanded");
+        
+        // Płynne dosunięcie widoku do góry sekcji usług
+        const servicesSection = document.getElementById("uslugi");
+        if (servicesSection) {
+            const topOffset = servicesSection.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: topOffset, behavior: "smooth" });
+        }
+    }
 }
 
-document.addEventListener("DOMContentLoaded", loadData);
+// ==========================================================================
+// START PO ZAŁADOWANIU STRONY (DANE + FORMULARZ)
+// ==========================================================================
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Ładowanie danych z pliku JSON
+    loadData();
+
+    // 2. Obsługa wysyłania formularza kontaktowego na maila
+    const contactForm = document.getElementById("contact-form");
+    const feedbackBox = document.getElementById("form-feedback");
+    const submitBtn = document.getElementById("btn-submit");
+
+    if (contactForm) {
+        contactForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Wysyłanie...";
+            submitBtn.disabled = true;
+            feedbackBox.className = "form-feedback";
+            feedbackBox.innerText = "";
+
+            const formData = new FormData(contactForm);
+
+            try {
+                const response = await fetch("contact.php", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.status === "success") {
+                    feedbackBox.className = "form-feedback success";
+                    feedbackBox.innerText = result.message;
+                    contactForm.reset();
+                } else {
+                    feedbackBox.className = "form-feedback error";
+                    feedbackBox.innerText = result.message || "Wystąpił błąd podczas wysyłania.";
+                }
+            } catch (error) {
+                feedbackBox.className = "form-feedback error";
+                feedbackBox.innerText = "Nie udało się połączyć z serwerem pocztowym.";
+            } finally {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
+});

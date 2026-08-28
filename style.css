@@ -307,7 +307,7 @@ body {
 }
 
 /* ==========================================================================
-   7. USŁUGI (KARTY ROZSZERZAJĄCE SIĘ W PRAWO)
+   7. USŁUGI (SIATKA 3-KOLUMNOWA Z GÓRNYM SPOTLIGHTEM NA 3 KOLUMNY)
    ========================================================================== */
 .services-section {
     background-color: #ffffff;
@@ -317,21 +317,24 @@ body {
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     align-items: stretch;
 }
 
+/* DOMYŚLNY WYGLĄD ZWYKŁEJ KARTY (1 KOLUMNA) */
 .service-card {
     background: var(--bg-main);
     border: 1px solid var(--border-color);
-    padding: 28px;
+    padding: 26px;
     border-radius: var(--radius);
     cursor: pointer;
     user-select: none;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
 }
 
 .service-card:hover {
@@ -343,8 +346,8 @@ body {
 .service-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
+    align-items: center;
+    margin-bottom: 14px;
 }
 
 .service-icon {
@@ -352,61 +355,92 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     border-radius: 10px;
     background: var(--accent-glow);
 }
 
 .expand-indicator {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: var(--accent);
     font-weight: 700;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: rgba(64, 145, 108, 0.1);
+    background: rgba(64, 145, 108, 0.12);
     transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .service-card h3 {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--primary);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .service-short-desc {
     color: var(--text-muted);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     line-height: 1.5;
 }
 
-/* Treść szczegółowa */
+/* UKRYTE SZCZEGÓŁY W ZWYKŁYM STANIE */
 .service-extra {
     display: none;
 }
 
+/* ==========================================================================
+   STAN AKTYWNY (KARTA PRZENIESIONA NA SAMĄ GÓRĘ I ROZSZERZONA NA 3 KOLUMNY)
+   ========================================================================== */
+.service-card.expanded {
+    order: -1; /* Pcha kartę na sam początek siatki */
+    grid-column: 1 / -1; /* Rozszerza na pełną szerokość 3 kolumn */
+    background: #ffffff;
+    border: 2px solid var(--accent);
+    box-shadow: var(--shadow-hover);
+    padding: 34px;
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 36px;
+    align-items: start;
+    animation: slideDownFade 0.35s ease forwards;
+}
+
+.service-card.expanded .expand-indicator {
+    transform: rotate(45deg);
+    background: var(--accent);
+    color: #ffffff;
+}
+
+.service-card.expanded .service-extra {
+    display: block;
+    border-left: 1px dashed var(--border-color);
+    padding-left: 32px;
+}
+
 .service-full-desc {
     color: var(--text-dark);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin-bottom: 14px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
 }
 
 .service-subitems {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 16px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Podpunkty w 2 estetycznych kolumnach */
+    gap: 8px 16px;
 }
 
 .service-subitems li {
     font-size: 0.88rem;
     color: var(--primary-light);
     font-weight: 500;
-    margin-bottom: 6px;
     position: relative;
     padding-left: 16px;
 }
@@ -419,51 +453,48 @@ body {
     font-weight: bold;
 }
 
-/* STAN ROZSZERZONY */
-.service-card.expanded {
-    background: #ffffff;
-    border-color: var(--accent);
-    box-shadow: var(--shadow-hover);
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.service-card.expanded .expand-indicator {
-    transform: rotate(45deg);
-    background: var(--accent);
-    color: #ffffff;
+/* ==========================================================================
+   RESPONSYWNOŚĆ (TABLET I SMARTFON)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-/* Na ekranach komputerów i tabletów: rozszerzenie na 2 kolumny w prawo */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
     .service-card.expanded {
-        grid-column: span 2;
-        display: grid;
-        grid-template-columns: 1fr 1.2fr;
-        gap: 28px;
-        align-items: start;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 24px;
     }
 
     .service-card.expanded .service-extra {
-        display: block;
-        border-left: 1px dashed var(--border-color);
-        padding-left: 24px;
-        animation: fadeIn 0.3s ease forwards;
-    }
-}
-
-/* Na małych telefonach: rozwijanie w dół bez psucia szerokości */
-@media (max-width: 767px) {
-    .service-card.expanded .service-extra {
-        display: block;
-        margin-top: 16px;
-        padding-top: 16px;
+        border-left: none;
         border-top: 1px dashed var(--border-color);
-        animation: fadeIn 0.3s ease forwards;
+        padding-left: 0;
+        padding-top: 18px;
     }
-}
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateX(8px); }
-    to { opacity: 1; transform: translateX(0); }
+    .service-subitems {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ==========================================================================
@@ -542,6 +573,29 @@ body {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.15);
+}
+
+.form-feedback {
+    display: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+.form-feedback.success {
+    display: block;
+    background-color: #d8f3dc;
+    color: #1b4332;
+    border: 1px solid #b7e4c7;
+}
+
+.form-feedback.error {
+    display: block;
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
 }
 
 /* ==========================================================================
