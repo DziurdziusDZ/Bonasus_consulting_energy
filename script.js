@@ -1,6 +1,11 @@
-// Ścieżka lokalna do pliku na serwerze
+// Konfiguracja ścieżki do lokalnego pliku bazy na serwerze
 const DATA_URL = "./data.json";
 
+// Stan globalny dla kafelków usług
+let servicesList = [];
+let activeServiceIndex = null;
+
+// Funkcja pomocnicza do bezpiecznego wpisywania tekstu
 function safeSetText(elementId, text) {
     const el = document.getElementById(elementId);
     if (el && text !== undefined && text !== null && text !== "") {
@@ -8,10 +13,11 @@ function safeSetText(elementId, text) {
     }
 }
 
+// 1. RENDEROWANIE ZAWARTOŚCI STRONY
 function renderAllContent(data) {
     if (!data) return;
 
-    // 1. DANE OGÓLNE
+    // A. DANE OGÓLNE (HERO + KONTAKT)
     if (data.ogolne) {
         const normalized = {};
         Object.keys(data.ogolne).forEach(k => normalized[k.trim().toLowerCase()] = data.ogolne[k]);
@@ -22,9 +28,14 @@ function renderAllContent(data) {
         safeSetText("contact-address", normalized["kontakt_adres"]);
         safeSetText("contact-email", normalized["kontakt_email"]);
         safeSetText("contact-phone", normalized["kontakt_telefon"]);
+
+        const emailLink = document.getElementById("contact-email");
+        if (emailLink && normalized["kontakt_email"]) {
+            emailLink.href = `mailto:${normalized["kontakt_email"]}`;
+        }
     }
 
-    // 2. ZESPÓŁ
+    // B. ZESPÓŁ
     const teamContainer = document.getElementById("team-container");
     if (teamContainer && data.zespol && data.zespol.length > 0) {
         teamContainer.innerHTML = "";
@@ -45,89 +56,191 @@ function renderAllContent(data) {
         });
     }
 
-    // 3. USŁUGI (ROZSZERZANE KARTY)
+    // C. USŁUGI (STABILNA SIATKA ZE SPOTLIGHTEM NA GÓRZE)
     const servicesContainer = document.getElementById("services-container");
     if (servicesContainer && data.uslugi && data.uslugi.length > 0) {
+        servicesList = data.uslugi;
         servicesContainer.innerHTML = "";
-        data.uslugi.forEach(service => {
-            const ikona = service.ikona || "⚡";
+
+        servicesList.forEach((service, index) => {
+            const ikona = service.ikona || "zap";
             const tytul = service.tytul || "Usługa";
             const krotkiOpis = service.krotki_opis || service.opis || "";
-            const pelnyOpis = service.pelny_opis || "";
-            const podpunkty = Array.isArray(service.podpunkty) ? service.podpunkty : [];
 
-            let subitemsHtml = "";
-            if (podpunkty.length > 0) {
-                subitemsHtml = `
-                    <ul class="service-subitems">
-                        ${podpunkty.map(item => `<li>${item}</li>`).join("")}
-                    </ul>
-                `;
-            }
+            // Obsługa zarówno wektora Lucide, jak i klasycznego emoji
+            const iconHtml = (ikona.length > 2)
+                ? `<i data-lucide="${ikona}"></i>`
+                : `<span>${ikona}</span>`;
 
             const card = document.createElement("div");
             card.className = "service-card";
-            card.setAttribute("onclick", "toggleServiceCard(this)");
+            card.id = `service-card-${index}`;
+            card.setAttribute("onclick", `selectService(${index})`);
 
             card.innerHTML = `
-                <div class="service-main">
-                    <div class="service-top">
-                        <div class="service-icon">${ikona}</div>
-                        <span class="expand-indicator" title="Rozwiń">+</span>
-                    </div>
-                    <h3>${tytul}</h3>
-                    <p class="service-short-desc">${krotkiOpis}</p>
+                <div class="service-top">
+                    <div class="service-icon">${iconHtml}</div>
+                    <span class="service-indicator">↗</span>
                 </div>
-                <div class="service-extra">
-                    ${pelnyOpis ? `<p class="service-full-desc">${pelnyOpis}</p>` : ""}
-                    ${subitemsHtml}
-                </div>
+                <h3>${tytul}</h3>
+                <p class="service-short-desc">${krotkiOpis}</p>
             `;
             servicesContainer.appendChild(card);
         });
     }
+
+    // Inicjalizacja ikon Lucide po wyrenderowaniu znaczników
+    if (window.lucide) {
+        lucide.createIcons();
+    }
 }
 
+// 2. OBSŁUGA WYBORU I PODGLĄDU USŁUGI W GÓRNYM PANELU
+function selectService(index) {
+    const previewPanel = document.getElementById("service-preview-panel");
+
+    // Jeśli kliknięto w już otwartą usługę, zwiń panel
+    if (activeServiceIndex === index) {
+        closeServicePreview();
+        return;
+    }
+
+    // Usuń wyszarzenie z poprzednio aktywnej karty
+    if (activeServiceIndex !== null) {
+        const prevCard = document.getElementById(`service-card-${activeServiceIndex}`);
+        if (prevCard) prevCard.classList.remove("is-selected");
+    }
+
+    activeServiceIndex = index;
+    const service = servicesList[index];
+
+    // Wyszarz aktualnie wybraną kartę w dolnej siatce
+    const currentCard = document.getElementById(`service-card-${index}`);
+    if (currentCard) currentCard.classList.add("is-selected");
+
+    // Przygotuj listę podpunktów
+    const podpunkty = Array.isArray(service.podpunkty) ? service.podpunkty : [];
+    let subitemsHtml = "";
+    if (podpunkty.length > 0) {
+        subitemsHtml = `
+            <ul class="preview-subitems">
+                ${podpunkty.map(item => `<li>${item}</li>`).join("")}
+            </ul>
+        `;
+    }
+
+    const ikona = service.ikona || "zap";
+    const iconHtml = (ikona.length > 2)
+        ? `<i data-lucide="${ikona}"></i>`
+        : `<span>${ikona}</span>`;
+
+    // Uzupełnij treść górnego panelu
+    previewPanel.innerHTML = `
+        <button class="preview-close-btn" onclick="closeServicePreview()" title="Zamknij szczegóły">&times;</button>
+        <div class="preview-left">
+            <div class="preview-icon">${iconHtml}</div>
+            <h3>${service.tytul}</h3>
+            <p>${service.krotki_opis || ""}</p>
+        </div>
+        <div class="preview-right">
+            <h4>Szczegóły oferty</h4>
+            ${service.pelny_opis ? `<p class="preview-full-desc">${service.pelny_opis}</p>` : ""}
+            ${subitemsHtml}
+        </div>
+    `;
+
+    previewPanel.style.display = "grid";
+
+    // Przelicz nową ikonę w panelu
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+
+    // Płynne dosunięcie widoku do panelu
+    previewPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+// ZAMYKANIE PODGLĄDU USŁUGI
+function closeServicePreview() {
+    const previewPanel = document.getElementById("service-preview-panel");
+    if (previewPanel) previewPanel.style.display = "none";
+
+    if (activeServiceIndex !== null) {
+        const currentCard = document.getElementById(`service-card-${activeServiceIndex}`);
+        if (currentCard) currentCard.classList.remove("is-selected");
+        activeServiceIndex = null;
+    }
+}
+
+// 3. POBIERANIE DANYCH Z LOKALNEGO PLIKU JSON
 async function loadData() {
     try {
-        const response = await fetch(DATA_URL + "?v=" + new Date().getTime()); // Parametr ?v zapobiega trzymaniu starego cache
-        if (!response.ok) throw new Error("HTTP " + response.status);
+        const response = await fetch(DATA_URL + "?v=" + new Date().getTime());
+        if (!response.ok) throw new Error("Błąd HTTP: " + response.status);
         const data = await response.json();
         renderAllContent(data);
     } catch (error) {
-        console.error("Błąd ładowania data.json:", error);
+        console.error("Błąd wczytywania bazy data.json:", error);
     }
 }
 
-function toggleServiceCard(clickedCard) {
-    const isAlreadyOpen = clickedCard.classList.contains("expanded");
+// 4. OBSŁUGA PLIKÓW COOKIE I BANERA ZGODY
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^|; )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+}
 
-    // Zamykamy wszystkie inne karty
-    document.querySelectorAll(".service-card.expanded").forEach(card => {
-        card.classList.remove("expanded");
-    });
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "; expires=" + date.toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax";
+}
 
-    // Jeśli kliknięta nie była wcześniej otwarta, otwieramy ją i delikatnie centrujemy widok
-    if (!isAlreadyOpen) {
-        clickedCard.classList.add("expanded");
-        
-        // Płynne dosunięcie widoku do góry sekcji usług
-        const servicesSection = document.getElementById("uslugi");
-        if (servicesSection) {
-            const topOffset = servicesSection.getBoundingClientRect().top + window.scrollY - 80;
-            window.scrollTo({ top: topOffset, behavior: "smooth" });
-        }
+function initCookieBanner() {
+    const banner = document.getElementById("cookie-banner");
+    if (!banner) return;
+
+    const savedConsent = getCookie("bonasus_consent") || localStorage.getItem("bonasus_consent");
+
+    if (!savedConsent) {
+        setTimeout(() => {
+            banner.style.display = "block";
+            setTimeout(() => banner.classList.add("visible"), 50);
+        }, 800);
+    }
+
+    const acceptBtn = document.getElementById("btn-cookie-accept");
+    if (acceptBtn) {
+        acceptBtn.addEventListener("click", () => {
+            setCookie("bonasus_consent", "all", 365);
+            localStorage.setItem("bonasus_consent", "all");
+            hideCookieBanner(banner);
+        });
+    }
+
+    const rejectBtn = document.getElementById("btn-cookie-reject");
+    if (rejectBtn) {
+        rejectBtn.addEventListener("click", () => {
+            setCookie("bonasus_consent", "essential", 365);
+            localStorage.setItem("bonasus_consent", "essential");
+            hideCookieBanner(banner);
+        });
     }
 }
 
-// ==========================================================================
-// START PO ZAŁADOWANIU STRONY (DANE + FORMULARZ)
-// ==========================================================================
+function hideCookieBanner(banner) {
+    banner.classList.remove("visible");
+    setTimeout(() => {
+        banner.style.display = "none";
+    }, 350);
+}
+
+// 5. INICJALIZACJA I OBSŁUGA FORMULARZA KONTAKTOWEGO
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Ładowanie danych z pliku JSON
     loadData();
+    initCookieBanner();
 
-    // 2. Obsługa wysyłania formularza kontaktowego na maila
     const contactForm = document.getElementById("contact-form");
     const feedbackBox = document.getElementById("form-feedback");
     const submitBtn = document.getElementById("btn-submit");
