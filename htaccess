@@ -1,0 +1,25 @@
+# 1. Wymuszenie HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 2. Blokada indeksowania katalogów
+Options -Indexes
+
+# 3. Blokada dostępu do plików systemowych i repozytoriów
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "(composer\.json|\.env|\.git|\.md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 4. Nagłówki bezpieczeństwa
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

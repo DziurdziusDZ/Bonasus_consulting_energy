@@ -90,7 +90,7 @@ function renderAllContent(data) {
 
 async function loadData() {
     try {
-        const response = await fetch(DATA_URL + "?v=" + new Date().getTime()); // Parametr ?v zapobiega trzymaniu starego cache
+        const response = await fetch(DATA_URL + "?v=" + new Date().getTime());
         if (!response.ok) throw new Error("HTTP " + response.status);
         const data = await response.json();
         renderAllContent(data);
@@ -102,16 +102,13 @@ async function loadData() {
 function toggleServiceCard(clickedCard) {
     const isAlreadyOpen = clickedCard.classList.contains("expanded");
 
-    // Zamykamy wszystkie inne karty
     document.querySelectorAll(".service-card.expanded").forEach(card => {
         card.classList.remove("expanded");
     });
 
-    // Jeśli kliknięta nie była wcześniej otwarta, otwieramy ją i delikatnie centrujemy widok
     if (!isAlreadyOpen) {
         clickedCard.classList.add("expanded");
         
-        // Płynne dosunięcie widoku do góry sekcji usług
         const servicesSection = document.getElementById("uslugi");
         if (servicesSection) {
             const topOffset = servicesSection.getBoundingClientRect().top + window.scrollY - 80;
@@ -120,14 +117,63 @@ function toggleServiceCard(clickedCard) {
     }
 }
 
-// ==========================================================================
-// START PO ZAŁADOWANIU STRONY (DANE + FORMULARZ)
-// ==========================================================================
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Ładowanie danych z pliku JSON
-    loadData();
+// OBSŁUGA PLIKÓW COOKIES
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^|; )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+}
 
-    // 2. Obsługa wysyłania formularza kontaktowego na maila
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "; expires=" + date.toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax";
+}
+
+function initCookieBanner() {
+    const banner = document.getElementById("cookie-banner");
+    if (!banner) return;
+
+    const savedConsent = getCookie("bonasus_consent") || localStorage.getItem("bonasus_consent");
+
+    if (!savedConsent) {
+        setTimeout(() => {
+            banner.style.display = "block";
+            setTimeout(() => banner.classList.add("visible"), 50);
+        }, 800);
+    }
+
+    const acceptBtn = document.getElementById("btn-cookie-accept");
+    if (acceptBtn) {
+        acceptBtn.addEventListener("click", () => {
+            setCookie("bonasus_consent", "all", 365);
+            localStorage.setItem("bonasus_consent", "all");
+            hideCookieBanner(banner);
+        });
+    }
+
+    const rejectBtn = document.getElementById("btn-cookie-reject");
+    if (rejectBtn) {
+        rejectBtn.addEventListener("click", () => {
+            setCookie("bonasus_consent", "essential", 365);
+            localStorage.setItem("bonasus_consent", "essential");
+            hideCookieBanner(banner);
+        });
+    }
+}
+
+function hideCookieBanner(banner) {
+    banner.classList.remove("visible");
+    setTimeout(() => {
+        banner.style.display = "none";
+    }, 350);
+}
+
+// START PO ZAŁADOWANIU STRONY
+document.addEventListener("DOMContentLoaded", () => {
+    loadData();
+    initCookieBanner();
+
     const contactForm = document.getElementById("contact-form");
     const feedbackBox = document.getElementById("form-feedback");
     const submitBtn = document.getElementById("btn-submit");

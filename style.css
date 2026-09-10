@@ -1,17 +1,17 @@
 /* ==========================================================================
-   1. ZMIENNE KOLORYSTYCZNE (PALETA ZIELONA - MOŻESZ JE DOWOLNIE ZMIENIAĆ)
+   1. ZMIENNE KOLORYSTYCZNE (PALETA ZIELONA)
    ========================================================================== */
 :root {
-    --primary: #1b4332;         /* Głęboka, elegancka zieleń bazowa */
-    --primary-light: #2d6a4f;   /* Jaśniejsza zieleń do nagłówków / hoverów */
-    --accent: #40916c;          /* Akcentowa zieleń (przyciski, ikony) */
-    --accent-glow: #d8f3dc;     /* Bardzo jasna zieleń (tła badge'y, subtelne ramki) */
+    --primary: #1b4332;
+    --primary-light: #2d6a4f;
+    --accent: #40916c;
+    --accent-glow: #d8f3dc;
     
-    --bg-main: #f8faf9;         /* Bardzo delikatne, czyste tło strony */
-    --bg-card: #ffffff;         /* Białe tło kart */
-    --text-dark: #1f2937;       /* Kolor głównego tekstu */
-    --text-muted: #4b5563;      /* Stonowany kolor opisów */
-    --border-color: #e5e7eb;    /* Kolor obramowań */
+    --bg-main: #f8faf9;
+    --bg-card: #ffffff;
+    --text-dark: #1f2937;
+    --text-muted: #4b5563;
+    --border-color: #e5e7eb;
     
     --font-family: 'Plus Jakarta Sans', sans-serif;
     --radius: 12px;
@@ -232,26 +232,16 @@ body {
     gap: 16px;
 }
 
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-}
-
 /* ==========================================================================
-   6. O NAS: ZDJĘCIA W OKRĘGACH NAPRZEMIENNIE (LEWO / PRAWO / LEWO)
+   6. O NAS (ZESPÓŁ)
    ========================================================================== */
 .team-section {
-    background-color: var(--bg-main); /* #f8faf9 */
+    background-color: var(--bg-main);
     position: relative;
     z-index: 1;
 }
 
-   .team-list {
+.team-list {
     display: flex;
     flex-direction: column;
     gap: 60px;
@@ -268,7 +258,6 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* Co drugi element odwraca kolejność (zdjęcie po prawej) */
 .team-card:nth-child(even) {
     flex-direction: row-reverse;
 }
@@ -277,7 +266,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Okrągłe zdjęcie z obramowaniem w kolorze akcentu */
 .team-avatar {
     width: 180px;
     height: 180px;
@@ -307,7 +295,7 @@ body {
 }
 
 /* ==========================================================================
-   7. USŁUGI (SIATKA 3-KOLUMNOWA Z GÓRNYM SPOTLIGHTEM NA 3 KOLUMNY)
+   7. USŁUGI (3 KOLUMNY + ROZSZERZENIE NA GÓRĘ)
    ========================================================================== */
 .services-section {
     background-color: #ffffff;
@@ -322,7 +310,6 @@ body {
     align-items: stretch;
 }
 
-/* DOMYŚLNY WYGLĄD ZWYKŁEJ KARTY (1 KOLUMNA) */
 .service-card {
     background: var(--bg-main);
     border: 1px solid var(--border-color);
@@ -387,17 +374,13 @@ body {
     line-height: 1.5;
 }
 
-/* UKRYTE SZCZEGÓŁY W ZWYKŁYM STANIE */
 .service-extra {
     display: none;
 }
 
-/* ==========================================================================
-   STAN AKTYWNY (KARTA PRZENIESIONA NA SAMĄ GÓRĘ I ROZSZERZONA NA 3 KOLUMNY)
-   ========================================================================== */
 .service-card.expanded {
-    order: -1; /* Pcha kartę na sam początek siatki */
-    grid-column: 1 / -1; /* Rozszerza na pełną szerokość 3 kolumn */
+    order: -1;
+    grid-column: 1 / -1;
     background: #ffffff;
     border: 2px solid var(--accent);
     box-shadow: var(--shadow-hover);
@@ -433,7 +416,7 @@ body {
     padding: 0;
     margin: 0 0 16px 0;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Podpunkty w 2 estetycznych kolumnach */
+    grid-template-columns: 1fr 1fr;
     gap: 8px 16px;
 }
 
@@ -464,9 +447,6 @@ body {
     }
 }
 
-/* ==========================================================================
-   RESPONSYWNOŚĆ (TABLET I SMARTFON)
-   ========================================================================== */
 @media (max-width: 992px) {
     .services-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -477,21 +457,18 @@ body {
     .services-grid {
         grid-template-columns: 1fr;
     }
-
     .service-card.expanded {
         display: flex;
         flex-direction: column;
         gap: 18px;
         padding: 24px;
     }
-
     .service-card.expanded .service-extra {
         border-left: none;
         border-top: 1px dashed var(--border-color);
         padding-left: 0;
         padding-top: 18px;
     }
-
     .service-subitems {
         grid-template-columns: 1fr;
     }
@@ -598,8 +575,20 @@ body {
     border: 1px solid #fecaca;
 }
 
+.form-rodo-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 12px;
+    line-height: 1.4;
+}
+
+.form-rodo-note a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
 /* ==========================================================================
-   9. STOPKA I RESPONSYWNOŚĆ (MOBILE)
+   9. STOPKA
    ========================================================================== */
 .footer {
     background: var(--primary);
@@ -639,21 +628,264 @@ body {
     .hero h1 {
         font-size: 2.1rem;
     }
-    
     .team-card, 
     .team-card:nth-child(even) {
         flex-direction: column;
         text-align: center;
         padding: 30px 20px;
     }
-
     .nav-links {
-        display: none; /* w prostej wersji ukryte na telefonie */
+        display: none;
     }
-
     .footer-content {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+    }
+}
+
+/* ==========================================================================
+   10. BANER COOKIES
+   ========================================================================== */
+.cookie-banner {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(30px);
+    width: calc(100% - 40px);
+    max-width: 900px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+    padding: 20px 26px;
+    z-index: 99999;
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.cookie-banner.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.cookie-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.cookie-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.cookie-badge {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.cookie-text h4 {
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.cookie-text p {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin: 0;
+}
+
+.cookie-text a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.cookie-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-cookie {
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    border: none;
+    font-family: inherit;
+}
+
+.btn-cookie-primary {
+    background-color: var(--accent);
+    color: #ffffff;
+}
+
+.btn-cookie-primary:hover {
+    background-color: var(--primary-light);
+}
+
+.btn-cookie-secondary {
+    background-color: transparent;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+.btn-cookie-secondary:hover {
+    background-color: #f1f5f3;
+}
+
+@media (max-width: 768px) {
+    .cookie-banner {
+        bottom: 15px;
+        width: calc(100% - 30px);
+        padding: 16px;
+    }
+    .cookie-container {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    .cookie-buttons {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+    .btn-cookie {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+    }
+}
+
+/* ==========================================================================
+   BANER COOKIES
+   ========================================================================== */
+.cookie-banner {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(30px);
+    width: calc(100% - 40px);
+    max-width: 900px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+    padding: 20px 26px;
+    z-index: 99999;
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.cookie-banner.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.cookie-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.cookie-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.cookie-badge {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.cookie-text h4 {
+    font-size: 1rem;
+    color: var(--primary);
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.cookie-text p {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin: 0;
+}
+
+.cookie-text a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.cookie-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-cookie {
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    border: none;
+    font-family: inherit;
+}
+
+.btn-cookie-primary {
+    background-color: var(--accent);
+    color: #ffffff;
+}
+
+.btn-cookie-primary:hover {
+    background-color: var(--primary-light);
+}
+
+.btn-cookie-secondary {
+    background-color: transparent;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+.btn-cookie-secondary:hover {
+    background-color: #f1f5f3;
+}
+
+@media (max-width: 768px) {
+    .cookie-banner {
+        bottom: 15px;
+        width: calc(100% - 30px);
+        padding: 16px;
+    }
+    .cookie-container {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    .cookie-buttons {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+    .btn-cookie {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
     }
 }

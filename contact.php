@@ -5,26 +5,15 @@ header('Content-Type: application/json; charset=utf-8');
 $recipients = "jkoczab@bonasusenergy.pl, wpacholczyk@bonasusenergy.pl";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // 1. Sprawdzenie pułapki na boty
-    if (!empty($_POST['company_website_check'])) {
-        // Bot wpadł w pułapkę - udajemy sukces, ale nie wysyłamy maila
-        echo json_encode(['status' => 'success', 'message' => 'Wiadomość została wysłana.']);
+
+    // 1. Ochrona Honeypot - boty wypełniają ukryte pola automatycznie
+    if (!empty($_POST['b_check_trap'])) {
+        // Udajemy sukces, ale nic nie wysyłamy na skrzynki
+        echo json_encode(['status' => 'success', 'message' => 'Dziękujemy! Wiadomość została pomyślnie wysłana.']);
         exit;
     }
 
-    if (!empty($_POST['b_check_trap'])) {
-    // Bot wypełnił ukryte pole – fałszujemy sukces, ale nic nie wysyłamy
-    echo json_encode(['status' => 'success', 'message' => 'Wiadomość wysłana pomyślnie.']);
-    exit;
-    }
-    
-    // 2. Blokada wysyłania zbyt długich wiadomości (ochrona bufora)
-    if (strlen($_POST['message'] ?? '') > 4000 || strlen($_POST['name'] ?? '') > 100) {
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Przekroczono dopuszczalną długość pól.']);
-        exit;
-    }
-    
+    // 2. Pobranie i oczyszczenie danych z formularza
     $name    = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $email   = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -36,7 +25,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    // 2. Przygotowanie tematu i treści maila
+    // Limit długości zabezpieczający przed atakami przeciążeniowymi
+    if (strlen($message) > 4000 || strlen($name) > 120) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Wiadomość przekracza dopuszczalną długość.']);
+        exit;
+    }
+
+    // 3. Przygotowanie tematu i treści maila
     $mailSubject = "Nowe zapytanie ze strony: " . ($subject ? $subject : "Formularz kontaktowy");
     
     $mailBody = "Otrzymano nową wiadomość z formularza na stronie bonasusenergy.pl:\n\n";
@@ -47,8 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $mailBody .= "--------------------------------------------------\n\n";
     $mailBody .= "Treść wiadomości:\n" . $message . "\n";
 
-    // 3. Nagłówki zabezpieczające przed wpadaniem do SPAMu
-    // Uwaga: Nadawcą powinien być adres w Waszej domenie, a Reply-To to adres klienta (by łatwo kliknąć "Odpowiedz")
+    // 4. Nagłówki pocztowe
     $headers = [
         'From' => 'Formularz Bonasus <kontakt@bonasusenergy.pl>',
         'Reply-To' => $email,
@@ -57,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'Content-Type' => 'text/plain; charset=UTF-8'
     ];
 
-    // 4. Wysłanie wiadomości przez serwer home.pl
+    // 5. Wysłanie wiadomości przez serwer home.pl
     if (mail($recipients, "=?UTF-8?B?" . base64_encode($mailSubject) . "?=", $mailBody, $headers)) {
         echo json_encode(['status' => 'success', 'message' => 'Dziękujemy! Wiadomość została pomyślnie wysłana. Skontaktujemy się wkrótce.']);
     } else {
