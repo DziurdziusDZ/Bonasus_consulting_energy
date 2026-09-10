@@ -1,26 +1,19 @@
-# 1. WYMUSZENIE SZYFROWANIA HTTPS
 RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# 2. BLOKADA PRZEGLĄDANIA KATALOGÓW PRZEZ PRZEGLĄDARKĘ
+# Blokada przeglądania katalogów z poziomu przeglądarki
 Options -Indexes
 
-# 3. BLOKADA DOSTĘPU DO PLIKÓW UKRYTYCH I KONFIGURACYJNYCH
+# Blokada odczytu plików ukrytych i systemowych
 <FilesMatch "^\.">
     Order allow,deny
     Deny from all
 </FilesMatch>
 
-<FilesMatch "(composer\.json|\.env|\.git|\.md)$">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
-
-# 4. NAGŁÓWKI BEZPIECZEŃSTWA (SECURITY HEADERS)
+# Nagłówki ochronne przed atakami ramkowymi i podszywaniem MIME
 <IfModule mod_headers.c>
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-Content-Type-Options "nosniff"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
-    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 </IfModule>
